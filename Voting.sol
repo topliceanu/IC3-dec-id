@@ -21,6 +21,8 @@ contract VotingContract{
 
     constructor(uint256 _blockCount){
         endBlock = block.number + _blockCount;
+        options["A"] = Option("A", 0);
+        options["B"] = Option("B", 0);
     }
 
     function vote(string memory _option) public onlyBeforeEnd{
@@ -38,7 +40,7 @@ contract VotingContract{
         string memory winningOption;
 
         for(uint256 i = 0; i < 2; i++){
-            string memory optionName = ["OptionA", "OptionB"][i];
+            string memory optionName = ["A", "B"][i];
             uint256 voteCount = options[optionName].voteCount;
 
             if(voteCount > maxVoteCount){
