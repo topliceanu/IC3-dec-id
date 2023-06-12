@@ -48,10 +48,4 @@ contract VotingContract{
         }
         return winningOption;
     }
-
-
-
-
-
-
 }
