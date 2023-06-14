@@ -24,6 +24,8 @@ contract VotingContract{
 
     function vote(uint256 _option, address _pk_user, bytes calldata _user_sig) public onlyBeforeEnd{
         require(_option >= 0 && _option < 2, "Option does not exist");
+        address recovered_sig = recoverSig(_user_sig, bytes32(_option));
+        require(recovered_sig == _pk_user, "Invalid signature");
         options[_option] = options[_option] + 1;
     }
 
