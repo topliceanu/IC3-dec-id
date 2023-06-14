@@ -17,19 +17,16 @@ pk = sk.get_verifying_key()
 public_key_bytes = b'\04' + pk.to_string()  # Add the prefix to indicate that it's uncompressed
 print("Public Key (hex):", public_key_bytes.hex())
 
-# Create a message
 message = b"This is a test message"
 
-# Create a SHA3/Keccak hash of the message
+#hash message
 message_hash = hashlib.sha3_256(message).digest()
 
-# Sign the message
 signature = sk.sign_digest(message_hash)
 
-# Recover r and s from the signature
+# Recover r and s from the signature for ecrecover
 r, s = util.sigdecode_string(signature, sk.curve.order)
 
-# Calculate v
 v = 27 + ((signature[0] - 27) % 2)
 
 # Display r, s and v in hexadecimal
