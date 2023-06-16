@@ -1,24 +1,19 @@
-#!/usr/bin/env python
-# coding: utf-8
+from eth_account.messages import encode_defunct
+from web3.auto import w3
 
-# In[ ]:
+# Private key
+private_key = '0x222a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be01'
 
+# The option you want to vote for
+option = 1
 
-from ecdsa import SigningKey, SECP256k1
+# Convert the integer to bytes
+option_bytes = option.to_bytes(32, byteorder='big')
 
-# Generate private key
-sk = SigningKey.generate(curve=SECP256k1)
-pk = sk.get_verifying_key()
+# Create a hash of the message
+hash_message = w3.solidity_keccak(['bytes32'], [option_bytes])
 
-# Save the public key in a format that's compatible with ecrecover
-public_key_bytes = b'\04' + pk.to_string()  # Add the prefix to indicate that it's uncompressed
+# Sign the hashed message
+signed_message = w3.eth.account.signHash(hash_message, private_key=private_key)
 
-# Save keys to files
-with open('private_key.pem', 'w') as f:
-    f.write(sk.to_pem().decode())
-
-with open('public_key.pem', 'w') as f:
-    f.write(pk.to_pem().decode())
-
-print("Keys generated and saved to files.")
-
+print('Signature:', signed_message.signature.hex())
