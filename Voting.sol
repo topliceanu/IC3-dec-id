@@ -43,8 +43,12 @@ contract VotingContract{
         options[_option] = options[_option] + 1;
     }
 
-    function getVoteCount(uint256 _option) public view returns (uint256) {
+    function getVoteCount(uint256 _option) public view returns (uint256){
         return options[_option];
+    }
+
+    function isDone() public view returns (bool){
+        return block.number >= endBlock;
     }
 
     function getWinningOption() public view returns (uint256){
