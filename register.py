@@ -113,6 +113,4 @@ if __name__ == "__main__":
     # make commitment
     commitment, r = mimc_commit(int(acct_address, 16))
 
-    # make zkp
-
-    # ask issuer to verify attestation, commitment, and zkp
+    # ask issuer to verify attestation and commitment and return a signature.
