@@ -18,15 +18,17 @@ import {
 import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
-  vote: z.string(),
+  commitment: z.string(),
+  zkp: z.string(),
 })
 
-export function VotingForm() {
+export function CryptoMagicForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      vote: "",
+      commitment: "",
+      zkp: "",
     },
   })
 
@@ -42,14 +44,32 @@ export function VotingForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="vote"
+          name="commitment"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Cast your vote</FormLabel>
+              <FormLabel>Your commitment</FormLabel>
               <FormControl>
-                <Input placeholder="Raku" {...field} />
+                <Input disabled placeholder="" {...field} />
               </FormControl>
-              <FormDescription>Vote for the dinner location!</FormDescription>
+              {/* <FormDescription>
+                Submit your token for verification!
+              </FormDescription> */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="zkp"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Your Zero-Knowledge Proof</FormLabel>
+              <FormControl>
+                <Input disabled placeholder="" {...field} />
+              </FormControl>
+              {/* <FormDescription>
+                Submit your token for verification!
+              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}

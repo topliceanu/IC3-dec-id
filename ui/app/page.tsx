@@ -3,6 +3,8 @@ import { Form } from "react-hook-form"
 
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
+import { CryptoMagicForm } from "@/components/crypto-magic-form"
+import { TokenSubmissionForm } from "@/components/token-form"
 import { VotingForm } from "@/components/voting-form"
 
 export default function IndexPage() {
@@ -18,7 +20,20 @@ export default function IndexPage() {
         </p> */}
       </div>
       <div>
-        <VotingForm />
+        <div className="">
+          <h2 className="text-2xl font-bold">Step 1: Token Submission</h2>
+          <TokenSubmissionForm />
+        </div>
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold">Step 2: Crypto Magic</h2>
+          <CryptoMagicForm />
+        </div>
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold">
+            Step 3: Decide where to go for dinner!
+          </h2>
+          <VotingForm />
+        </div>
       </div>
     </section>
   )

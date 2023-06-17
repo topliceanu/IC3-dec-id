@@ -18,15 +18,15 @@ import {
 import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
-  vote: z.string(),
+  token: z.string(),
 })
 
-export function VotingForm() {
+export function TokenSubmissionForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      vote: "",
+      token: "",
     },
   })
 
@@ -42,14 +42,16 @@ export function VotingForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="vote"
+          name="token"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Cast your vote</FormLabel>
+              <FormLabel>Submit your token for verification</FormLabel>
               <FormControl>
-                <Input placeholder="Raku" {...field} />
+                <Input placeholder="" {...field} />
               </FormControl>
-              <FormDescription>Vote for the dinner location!</FormDescription>
+              <FormDescription>
+                Submit your token for verification!
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
