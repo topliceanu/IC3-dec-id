@@ -32,7 +32,7 @@ def Hint_l(m):
 
     return (int(binary, 2))
 
-def generate_keys(random):
+def generate_keys(use_random):
     sk = 123123
     if random:
         sk = random.getrandbits(128) % l
@@ -80,7 +80,8 @@ def sign_to_json(msg, sk, pk):
     return R, S
 
 
-sk, pk = generate_keys(False)
-msg = 16204137089086222846243685777293343290570733397750586346311362351531831223551
-R, S = sign_to_json(msg, 123123, pk)
-print("Verified: ", verify_sig(R, S, msg, pk))
+if __name__ == "__main__":
+    sk, pk = generate_keys(False)
+    msg = 16204137089086222846243685777293343290570733397750586346311362351531831223551
+    R, S = sign_to_json(msg, 123123, pk)
+    print("Verified: ", verify_sig(R, S, msg, pk))

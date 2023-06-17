@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     print("Contacting server at", SERVER_URL + "/issue")
     server_req = requests.post(SERVER_URL + "/issue", json={ "commitment": commitment, "attestation": attestation })
-    print(server_req)
-    # print(f"Status Code: {server_req.status_code}, Response: {server_req.json()}")
+    # print(server_req)
+    print(f"Status Code: {server_req.status_code}, Response: {server_req.json()}")
 
     # ask issuer to verify attestation, commitment, and zkp
