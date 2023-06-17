@@ -1,17 +1,17 @@
 from web3.auto import w3
+from eth_keys import keys
 
-# Private key
-# private_key = '0x222a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be01'
-
-def gen_key() -> (str, str):
+def gen_key() -> (str, str, str):
     # Generate a private key
     acct = w3.eth.account.create()
     private_key = acct._private_key.hex()
 
+    public_key = keys.PrivateKey(bytes.fromhex(private_key[2:])).public_key
+
     # Generate an Ethereum address
     acct_address = acct.address
 
-    return private_key, acct_address
+    return private_key, public_key, acct_address
 
 def sign_vote(vote: int, private_key: str) -> str:
     # Convert the integer to bytes
