@@ -105,6 +105,13 @@ def MiMC7(num_rounds, x, k):
     
     return (x + k) % curve_order
 
+
+def MultiMiMC7(num_rounds, inputs, k):
+    r = k
+    for inp in inputs:
+        r = r + inp + MiMC7(num_rounds, inp, r) 
+    return r
+
 # Let's test this a little
-# output = MiMC7(2, 3, 11)
+# output = MiMC7(91, 3, 11)
 # print("Output = ", output)
