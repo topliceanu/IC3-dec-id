@@ -73,6 +73,7 @@ print("    base     " , B)
 '''
 
 b = 126  # beacuse b * 2  must be less than the max element that exists in the field. otherwise we cannot encode it inside zksnark.
+# b = 255
 q = 21888242871839275222246405745257275088548364400416034343698204186575808495617  # 2**255 - 19
 l = 2736030358979909402780800718157159386076813972158567259200215660948447373041  # 2**252 + 27742317777372353535851937790883648493
 
@@ -120,8 +121,7 @@ def scalarmult(P, e):
     point = Point(Fq(P[0]), Fq(P[1]))
 
     out = point * Fq(e)
-
-    return ([int(out.u), int(out.v)])
+    return [int(out.u), int(out.v)]
 
 
 def pointAddition(P, e):
