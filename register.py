@@ -2,9 +2,10 @@ import subprocess
 import pprint
 import requests
 import json
-from nacl.signing import VerifyKey
+
 from generate_commitment import mimc_commit
 from vote_signature import gen_key
+from attestation_check import is_attestation_valid
 
 SERVER_URL = "http://localhost:8000"
 
@@ -66,23 +67,6 @@ def get_deco_config(token, server_id):
     }
   ]
 }
-
-def is_attestation_valid(attestation) -> bool:
-
-    try:
-        pub_key_bytes = bytes.fromhex(attestation['public_key_hex'][2:])
-        sig_bytes = bytes.fromhex(attestation['signature_hex'][2:])
-        msg_bytes = bytes.fromhex(attestation['data_hex'][2:])
-
-        verify_key = VerifyKey(pub_key_bytes) # public key
-
-        verify_key.verify(msg_bytes, sig_bytes)
-        print("Attestation has been verified.")
-        return True
-    except:
-        print("Attestation verification has failed.")
-        return False
-
 
 if __name__ == "__main__":
     auth_token = "Bearer jufCZwvS3GES9aYbJatwv4GPHzoc7j" # sys.argv[1]
