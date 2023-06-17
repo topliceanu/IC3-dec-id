@@ -1,4 +1,3 @@
-from eth_account.messages import encode_defunct
 from web3.auto import w3
 
 # Private key
