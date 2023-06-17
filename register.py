@@ -1,6 +1,8 @@
 import subprocess
 import json
 from nacl.signing import VerifyKey
+from generate_commitment import mimc_commit
+from vote_signature import gen_key
 
 command = [
     "docker",
@@ -82,6 +84,7 @@ if __name__ == "__main__":
     auth_token = "Bearer jufCZwvS3GES9aYbJatwv4GPHzoc7j" # sys.argv[1]
     deco_cfg = get_deco_config(token = auth_token, server_id = "1117987715179348009")
     serialized_cfg = json.dumps(deco_cfg)
+    private_key, public_key, acct_address = gen_key()
 
     #print(serialized_cfg)
     #attestation = subprocess.check_output(command, serialized_cfg, text=True)
@@ -108,6 +111,7 @@ if __name__ == "__main__":
         exit(1)
 
     # make commitment
+    commitment, r = mimc_commit(int(acct_address, 16))
 
     # make zkp
 
