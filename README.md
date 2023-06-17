@@ -9,9 +9,14 @@ Built at IC3'23
 
 For macos installation:
 
-```
-
+```bash
 python3.10 -m venv ./venv
 source ./venv/bin/activate
 pip install -r requirements.txt
+```
+
+## Running the issuer
+
+```bash
+flask --app issuer run -p 8000
 ```
