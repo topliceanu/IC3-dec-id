@@ -100,17 +100,17 @@ def MiMC7(num_rounds, x, k):
     ]
     
     for i in range(num_rounds):
-        x = ((k + x + (c[i])**7 % l)) % l
-    return (x + k) % l
+        x = ((k + x + c[i])**7) % curve_order
+    return (x + k) % curve_order
 
 
 def MultiMiMC7(num_rounds, inputs, k):
     r = k
     i = 0
     for inp in inputs:
-        r = (r + inp + MiMC7(num_rounds, inp, r)) % curve_order
+        r = r + inp + MiMC7(num_rounds, inp, r) % curve_order
         i = i + 1
-    return r
+    return r % curve_order
 
 
 
