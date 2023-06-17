@@ -2,9 +2,11 @@
 
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAtom } from "jotai"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
+import { commitmentAtom, zkpAtom } from "@/lib/atoms"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -22,6 +24,9 @@ const formSchema = z.object({
 })
 
 export function TokenSubmissionForm() {
+  const [commitment, setCommitment] = useAtom(commitmentAtom)
+  const [zkp, setZkp] = useAtom(zkpAtom)
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,6 +40,9 @@ export function TokenSubmissionForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
+    // make call to server to verify user is eligible to vote
+    setCommitment("abc")
+    setZkp("def")
   }
 
   return (

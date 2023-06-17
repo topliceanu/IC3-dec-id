@@ -2,9 +2,11 @@
 
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAtom } from "jotai"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
+import { commitmentAtom, zkpAtom } from "@/lib/atoms"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -23,6 +25,9 @@ const formSchema = z.object({
 })
 
 export function CryptoMagicForm() {
+  const [commitment, setCommitment] = useAtom(commitmentAtom)
+  const [zkp, setZkp] = useAtom(zkpAtom)
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,7 +54,7 @@ export function CryptoMagicForm() {
             <FormItem>
               <FormLabel>Your commitment</FormLabel>
               <FormControl>
-                <Input disabled placeholder="" {...field} />
+                <Input disabled placeholder="" {...field} value={commitment} />
               </FormControl>
               {/* <FormDescription>
                 Submit your token for verification!
