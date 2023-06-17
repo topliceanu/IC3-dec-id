@@ -55,7 +55,7 @@ def fund_account(fund_from: str, address: str, ether_amount: float) -> str:
     # Send the transaction
     tx_hash = w3provider.eth.send_raw_transaction(signed_tx.rawTransaction)
 
-    tx_receipt = w3provider.eth.wait_for_transaction_receipt(tx_hash, 60)
+    tx_receipt = w3provider.eth.wait_for_transaction_receipt(tx_hash, 120)
 
     return tx_receipt['transactionHash']
 
