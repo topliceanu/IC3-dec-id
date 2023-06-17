@@ -6,14 +6,17 @@ Built at IC3'23
 
 ## Install
 
-
-For macos installation:
+- Install python dependencies
 
 ```bash
 python3.10 -m venv ./venv
 source ./venv/bin/activate
 pip install -r requirements.txt
 ```
+
+- Install circom and snarkjs
+
+Follow the [installation guides](https://docs.circom.io/getting-started/installation/).
 
 ## Running the issuer
 
