@@ -44,13 +44,11 @@ def generate_keys(random):
 def mimc_signature(m, sk, pk):
     h = str(MiMC7(91, sk, 0))
     a = 2 ** (b - 2) + sum(2 ** i * bit(h, i) for i in range(3, b - 2))
-    print("Proof a = ", a)
-    print("A = ", scalarmult(B,  a%l))
 
     # r = Hint_l(int(''.join([h[i] for i in range(int(b // 8), int(b // 4))])) + m)
     r = 5
     R = scalarmult(B, 8 * r)
-    h = MultiMiMC7(91, [R[0], R[1], pk[0], pk[1], m], 0)
+    h = MultiMiMC7(91, [R[0], R[1], pk[0], pk[1], m], 0) % l
     print("Ah = ", scalarmult(pk,  h%l))
     S = (r + (h * a)) % l
     return R, S
@@ -58,8 +56,13 @@ def mimc_signature(m, sk, pk):
 
 def verify_sig(R, S, m, pk):
     A = pk
-    h = MultiMiMC7(91, [R[0], R[1], pk[0], pk[1], m], 0)
+    h = MultiMiMC7(91, [R[0], R[1], pk[0], pk[1], m], 0) % l
+    print("A = ", A)
     print("8B = ", scalarmult(B, 8))
+    print("S8B = ", scalarmult(B, 8 * S))
+    print("h = ", h)
+    print("R = ", R)
+    print("Other side = ", pointAddition(R, scalarmult(A, (8 * h) % l)))
     if scalarmult(B, 8 * S) != pointAddition(R, scalarmult(A, (8 * h) % l)):
         raise Exception("signature does not pass verification")
 
@@ -80,7 +83,9 @@ def sign_to_json(msg, sk, pk):
     return R, S
 
 
-sk, pk = generate_keys(False)
-msg = 16204137089086222846243685777293343290570733397750586346311362351531831223551
-R, S = sign_to_json(msg, 123123, pk)
-print("Verified: ", verify_sig(R, S, msg, pk))
+# sk, pk = generate_keys(False)
+# msg = 16204137089086222846243685777293343290570733397750586346311362351531831223551
+# R, S = sign_to_json(msg, 123123, pk)
+# print("Verified: ", verify_sig(R, S, msg, pk))
+u = MultiMiMC7(2, [1, 1], 0)
+print("\n Mimc = ", u, "\n")
