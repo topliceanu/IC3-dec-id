@@ -1,8 +1,12 @@
 import subprocess
+import pprint
+import requests
 import json
 from nacl.signing import VerifyKey
 from generate_commitment import mimc_commit
 from vote_signature import gen_key
+
+SERVER_URL = "http://localhost:8000"
 
 command = [
     "docker",
@@ -114,3 +118,13 @@ if __name__ == "__main__":
     commitment, r = mimc_commit(int(acct_address, 16))
 
     # ask issuer to verify attestation and commitment and return a signature.
+    # make zkp
+
+    # data = { commitment, attestation }
+
+    print("Contacting server at", SERVER_URL + "/issue")
+    server_req = requests.post(SERVER_URL + "/issue", json={ "commitment": commitment, "attestation": attestation })
+    print(server_req)
+    # print(f"Status Code: {server_req.status_code}, Response: {server_req.json()}")
+
+    # ask issuer to verify attestation, commitment, and zkp
