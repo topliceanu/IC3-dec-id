@@ -2,6 +2,7 @@ import json
 import random
 from babyjubjub.ed25519 import *
 from generate_mimc_hash import *
+
 # b = 255
 def publickey_l(sk):
     h = str(MiMC7(91, sk, 0))
@@ -36,7 +37,7 @@ def generate_keys(random):
     sk = 123123
     if random:
         sk = random.getrandbits(128) % l
-    
+
     pk = publickey_l(sk)
     return sk, pk
 
@@ -73,19 +74,11 @@ def sign_to_json(msg, sk, pk):
             'enabled': "1",
             'Ax': str(pk[0]),
             'Ay': str(pk[1]),
-            'S' : str(S), 
-            'R8x': str(R[0]), 
+            'S' : str(S),
+            'R8x': str(R[0]),
             'R8y': str(R[1]),
             'M': str(msg)}
 
     with open('sig_in.json', 'w') as f:
         json.dump(data, f)
     return R, S
-
-
-# sk, pk = generate_keys(False)
-# msg = 16204137089086222846243685777293343290570733397750586346311362351531831223551
-# R, S = sign_to_json(msg, 123123, pk)
-# print("Verified: ", verify_sig(R, S, msg, pk))
-u = MultiMiMC7(2, [1, 1], 0)
-print("\n Mimc = ", u, "\n")
