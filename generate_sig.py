@@ -91,7 +91,8 @@ def sign_to_data(msg, sk, pk):
 
 sk, pk = generate_keys(False)
 msg = 16204137089086222846243685777293343290570733397750586346311362351531831223551
-# _, msg = mimc_commit(3, False)
+_, msg = mimc_commit(3, False)
+print(msg)
 R, S = sign_to_json(msg, 123123, pk)
 print("Verified: ", verify_sig(R, S, msg, pk))
 # u = MultiMiMC7(91, [11111, 0], 0)
