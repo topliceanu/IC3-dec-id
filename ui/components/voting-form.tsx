@@ -43,6 +43,35 @@ export function VotingForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
+
+    const postData = async () => {
+      const url = "http://localhost:8000/register"
+      const data = {
+        token: "Bearer jufCZwvS3GES9aYbJatwv4GPHzoc7j",
+        vote: values.vote,
+      }
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+
+        const jsonData = await response.json()
+        console.log("received from /vote route", jsonData)
+
+        // setCommitment(jsonData.data.commitment)
+        // setPublicKey(jsonData.data.public_key)
+        // setAttestation(jsonData.data.attestation)
+        // setEligibility(true)
+      } catch (error) {
+        console.error("Error:", error)
+      }
+    }
+    postData()
   }
 
   return (
