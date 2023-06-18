@@ -95,7 +95,7 @@ def issue():
     payload = {
         "success": "true", 
         "data": {
-            "commitment": commitment
+            "signed_commitment": signed_commitment
         }
     }
 
