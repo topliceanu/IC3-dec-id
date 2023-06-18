@@ -32,10 +32,10 @@ def Hint_l(m):
 
     return (int(binary, 2))
 
-def generate_keys(random):
+def generate_keys(use_random):
     sk = 123123
-    if random:
-        sk = random.getrandbits(128) % curve_order
+    if use_random:
+        sk = int(random.getrandbits(128)) % curve_order
     
     pk = publickey_l(sk)
     return sk, pk
@@ -87,14 +87,40 @@ def sign_to_data(msg, sk, pk):
 
     return data, R, S
 
+def sign_to_data_and_com(msg, sk, pk):
+    m = msg
+    r, msg_com = mimc_commit(m, True)  
+    R, S = sign_to_json(msg_com, sk, pk)
+    data = {
+            'voter_PK': str(msg),
+            'voter_r': str(r),
+            'enabled': "1",
+            'Ax': str(pk[0]),
+            'Ay': str(pk[1]),
+            'S' : str(S), 
+            'R8x': str(R[0]), 
+            'R8y': str(R[1]),
+            'M': str(msg_com)}
+
+    with open('sig_in.json', 'w') as f:
+        json.dump(data, f)
+    return R, S
 
 
-sk, pk = generate_keys(False)
-msg = 16204137089086222846243685777293343290570733397750586346311362351531831223551
-_, msg = mimc_commit(3, False)
-print(msg)
-R, S = sign_to_json(msg, 123123, pk)
-print("Verified: ", verify_sig(R, S, msg, pk))
+def test_sig():
+    sk, pk = generate_keys(True)
+    msg = 16204137089086222846243685777293343290570733397750586346311362351531831223551
+    sign_to_data_and_com(msg, sk, pk)
+
+
+# test_sig()
+
+# msg1 = 16204137089086222846243685777293343290570733397750586346311362351531831223551
+# _, msg = mimc_commit(msg1, False)
+# print(msg)
+# R, S = sign_to_json(msg, 123123, pk)
+# print("Verified: ", verify_sig(R, S, msg, pk))
+
 # u = MultiMiMC7(91, [11111, 0], 0)
 # print("\n Mimc = ", u, "\n")
 
