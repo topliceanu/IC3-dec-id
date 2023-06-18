@@ -41,6 +41,16 @@ account_usage_mapping = {
     '0xBC300e8A6611EA4B2e788fDafa4fdBd6880ff6A4': False
 }
 
+# schema for users
+# identifier key is the auth_token from the browser
+# for each user, we have:
+# public key = "pk"
+# private key = "sk"
+# commitment = "commitment"
+# signed_commitment = "signed_commitment"
+# random value for commitment = "r"
+# proof = "proof"
+# user's ethereum address = "voting_account"
 users = {}
 
 def get_user_eth_address(token) -> str:
