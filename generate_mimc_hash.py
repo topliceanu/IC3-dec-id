@@ -1,4 +1,3 @@
-
 import sys
 from babyjubjub.ed25519 import *
 curve_order = 21888242871839275222246405745257275088548364400416034343698204186575808495617
@@ -98,7 +97,7 @@ def MiMC7(num_rounds, x, k):
         18979889247746272055963929241596362599320706910852082477600815822482192194401,
         13602139229813231349386885113156901793661719180900395818909719758150455500533
     ]
-    
+
     for i in range(num_rounds):
         x = ((k + x + c[i])**7) % curve_order
     return (x + k) % curve_order
@@ -111,9 +110,3 @@ def MultiMiMC7(num_rounds, inputs, k):
         r = r + inp + MiMC7(num_rounds, inp, r) % curve_order
         i = i + 1
     return r % curve_order
-
-
-
-# Let's test this a little
-# output = MiMC7(91, 3, 11)
-# print("Output = ", output)

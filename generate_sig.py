@@ -32,10 +32,11 @@ def Hint_l(m):
 
     return (int(binary, 2))
 
-def generate_keys(use_random):
+def generate_keys(random):
     sk = 123123
     if random:
         sk = random.getrandbits(128) % curve_order
+
     pk = publickey_l(sk)
     return sk, pk
 
@@ -84,8 +85,4 @@ def sign_to_data(msg, sk, pk):
             'R8y': str(R[1]),
             'M': str(msg)}
 
-if __name__ == "__main__":
-    sk, pk = generate_keys(False)
-    msg = 16204137089086222846243685777293343290570733397750586346311362351531831223551
-    R, S = sign_to_json(msg, 123123, pk)
-    print("Verified: ", verify_sig(R, S, msg, pk))
+    return data, R, S
