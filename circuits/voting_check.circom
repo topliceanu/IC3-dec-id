@@ -26,21 +26,8 @@ template VotingCheck() {
 
     com <-- commitment.com;
     
-    // com === M; 
-    // component test_multi = MultiMiMC7(2, 91);
-    // test_multi.in <== [11111, 0];
-    // test_multi.k <== 0;
-    // log(100001);
-    // log(test_multi.out);
-
-    // component mimc = MiMC7(2);
-    // mimc.x_in <== 3;
-    // mimc.k <== 2;
-    // log(100001);
-    // log(mimc.out);
-
+    com === M; 
     component sig_verify = EdDSAMiMCVerifier();
-    log(com);
     sig_verify.enabled <== enabled;
     sig_verify.M <== M;
     sig_verify.Ax <== Ax;
@@ -51,4 +38,4 @@ template VotingCheck() {
 
 }
 
-component main = VotingCheck();
+component main {public [Ax, Ay, M]} = VotingCheck();

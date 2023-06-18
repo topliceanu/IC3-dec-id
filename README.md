@@ -14,6 +14,10 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 ```
 
+- Install nodejs
+
+Follow the instructions on [nodejs.org/en/download](https://nodejs.org/en/download).
+
 - Install circom and snarkjs
 
 Follow the [installation guides](https://docs.circom.io/getting-started/installation/).
