@@ -202,7 +202,7 @@ def register():
     set_user_data(auth_token, "sk", private_key) # set private key
 
     # make commitment
-    commitment, r = mimc_commit(int(eth_address, 16), True)
+    r, commitment = mimc_commit(int(eth_address, 16), True)
 
     print("Contacting server at", SERVER_URL + "/issue")
     server_req = requests.post(SERVER_URL + "/issue", json={ "commitment": commitment, "attestation": attestation })

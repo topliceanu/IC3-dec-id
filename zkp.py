@@ -8,10 +8,10 @@ def write_to_tmp_file(data):
         temp_file.flush()
     return temp_file.name
 
-def generate_proof(voter_pk, voter_addr, r:str, issuer_pk, signed_commitment, commitment):
+def generate_proof(voter_pk, eth_address, r:str, issuer_pk, signed_commitment, commitment):
     # Create a tmp file to store the input for the ZK circuit.
     zkp_input = {
-        "voter_PK": str(int(voter_addr, 16)),
+        "voter_PK": str(int(eth_address, 16)),
         #"voter_PK": str(int.from_bytes(voter_pk.to_bytes(), byteorder="big")),
         "voter_r": str(r),
         "enabled": "1", # Always 1
