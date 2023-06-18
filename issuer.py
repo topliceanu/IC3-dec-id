@@ -271,6 +271,6 @@ def vote():
     contract_address = '0xb6a6a7EF95d9419eca96d2f2b8cE71D5820E59e1' # TODO Change this to read from file !!!!!!
 
     send_tx_sk = accounts[user['voting_account']]
-    transaction_hash = vote(0, contract_address, user['sk'], user['pk'], send_tx_sk, proof)
+    transaction_hash = vote(0, contract_address, user['sk'], user['voting_account'], send_tx_sk, proof)
 
     return json.dumps({'proof': proof, 'public': public}), 200, { "Content-Type": "application/json" }
