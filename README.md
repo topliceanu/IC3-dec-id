@@ -23,3 +23,9 @@ Follow the [installation guides](https://docs.circom.io/getting-started/installa
 ```bash
 flask --app issuer run -p 8000
 ```
+
+## Getting the user token
+
+```bash
+python query_discord.py authorization_token
+```
