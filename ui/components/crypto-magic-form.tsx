@@ -20,8 +20,9 @@ import {
 import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
+  attestation: z.string(),
   commitment: z.string(),
-  zkp: z.string(),
+  pubkey: z.string(),
 })
 
 export function CryptoMagicForm() {
@@ -32,8 +33,9 @@ export function CryptoMagicForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      attestation: "",
       commitment: "",
-      zkp: "",
+      pubkey: "",
     },
   })
 
@@ -41,12 +43,42 @@ export function CryptoMagicForm() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/test")
+        const jsonData = await response.json()
+        console.log(jsonData)
+        // setData(jsonData);
+      } catch (error) {
+        console.error("Error fetching data:", error)
+      }
+    }
+
+    fetchData()
+
     console.log(values)
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="attestation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Your attestation</FormLabel>
+              <FormControl>
+                <Input disabled placeholder="" {...field} value={commitment} />
+              </FormControl>
+              {/* <FormDescription>
+                Submit your token for verification!
+              </FormDescription> */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="commitment"
@@ -65,10 +97,10 @@ export function CryptoMagicForm() {
         />
         <FormField
           control={form.control}
-          name="zkp"
+          name="pubkey"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Your Zero-Knowledge Proof</FormLabel>
+              <FormLabel>Your public key</FormLabel>
               <FormControl>
                 <Input disabled placeholder="" {...field} />
               </FormControl>

@@ -6,7 +6,12 @@ import { useAtom } from "jotai"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
-import { commitmentAtom, zkpAtom } from "@/lib/atoms"
+import {
+  attestationAtom,
+  commitmentAtom,
+  pubkeyAtom,
+  zkpAtom,
+} from "@/lib/atoms"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -23,9 +28,16 @@ const formSchema = z.object({
   token: z.string(),
 })
 
-export function TokenSubmissionForm() {
+interface TokenSubmissionFormProps {
+  setEligibility: (eligible: boolean) => void
+}
+
+export function TokenSubmissionForm({
+  setEligibility,
+}: TokenSubmissionFormProps) {
   const [commitment, setCommitment] = useAtom(commitmentAtom)
-  const [zkp, setZkp] = useAtom(zkpAtom)
+  const [publicKey, setPublicKey] = useAtom(pubkeyAtom)
+  const [attestation, setAttestation] = useAtom(attestationAtom)
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,9 +52,34 @@ export function TokenSubmissionForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
+
+    const postData = async () => {
+      const url = "http://localhost:8000/register"
+      const data = { token: "Bearer jufCZwvS3GES9aYbJatwv4GPHzoc7j" }
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+
+        const jsonData = await response.json()
+        console.log("received from /register route", jsonData)
+
+        setCommitment(jsonData.data.commitment)
+        setPublicKey(jsonData.data.public_key)
+        setAttestation(jsonData.data.attestation)
+        setEligibility(true)
+      } catch (error) {
+        console.error("Error:", error)
+      }
+    }
+    postData()
     // make call to server to verify user is eligible to vote
     setCommitment("abc")
-    setZkp("def")
   }
 
   return (
@@ -58,7 +95,7 @@ export function TokenSubmissionForm() {
                 <Input placeholder="" {...field} />
               </FormControl>
               <FormDescription>
-                Submit your token for verification!
+                Submit your token for validation.
               </FormDescription>
               <FormMessage />
             </FormItem>

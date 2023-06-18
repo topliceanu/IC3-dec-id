@@ -17,6 +17,14 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select"
+
 const formSchema = z.object({
   vote: z.string(),
 })
@@ -26,7 +34,7 @@ export function VotingForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      vote: "",
+      vote: "1",
     },
   })
 
@@ -47,9 +55,22 @@ export function VotingForm() {
             <FormItem>
               <FormLabel>Cast your vote</FormLabel>
               <FormControl>
-                <Input placeholder="Raku" {...field} />
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select an option" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
-              <FormDescription>Vote for the dinner location!</FormDescription>
+              {/* <FormDescription>Vote for the dinner location!</FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
