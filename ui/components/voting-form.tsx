@@ -45,9 +45,9 @@ export function VotingForm() {
     console.log(values)
 
     const postData = async () => {
-      const url = "http://localhost:8000/vote"
+      const url = "http://137.184.23.140:8000/vote"
       const data = {
-        token: "Bearer jufCZwvS3GES9aYbJatwv4GPHzoc7j",
+        token: `Bearer ${values.token}`,
         vote: values.vote,
       }
 
@@ -94,8 +94,8 @@ export function VotingForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    <SelectItem value="0">0</SelectItem>
                     <SelectItem value="1">1</SelectItem>
-                    <SelectItem value="2">2</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>

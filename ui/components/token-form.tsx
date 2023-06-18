@@ -54,8 +54,8 @@ export function TokenSubmissionForm({
     console.log(values)
 
     const postData = async () => {
-      const url = "http://localhost:8000/register"
-      const data = { token: "Bearer jufCZwvS3GES9aYbJatwv4GPHzoc7j" }
+      const url = "http://137.184.23.140:8000/register"
+      const data = { token: `Bearer ${values.token}` }
 
       try {
         const response = await fetch(url, {
