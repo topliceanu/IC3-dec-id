@@ -23,8 +23,13 @@ def deploy_voting_contract(num_of_blocks: int = 100) -> str:
     with open(f'Voting.abi', 'w') as f:
         json.dump(contract_abi, f)
 
+    with open('issuer_keys.json') as f:
+        issuer_pk = json.load(f)['issuer_pk']
+
+    verifier_contract_address = Web3.to_checksum_address('0x8c4c43c64943a7a6fd0ab8575194afaaafbfcdf1')
+
     # Define the arguments for the contract constructor (if any)
-    constructor_args = (num_of_blocks, _,_, '0x8c4c43c64943a7a6fd0ab8575194afaaafbfcdf1')
+    constructor_args = (num_of_blocks, issuer_pk[0],issuer_pk[1], verifier_contract_address)
 
     # Build a transaction to deploy the contract
     contract_factory = w3.eth.contract(abi=contract_abi, bytecode=contract_bytecode)
@@ -101,9 +106,11 @@ def deploy_verifier_contract() -> str:
     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
 
     # Wait for the transaction to be mined
-    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash, 60)
+    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash, 120)
 
     return tx_receipt['contractAddress']
 
 if __name__ == '__main__':
-    deploy_verifier_contract()
+    tx = deploy_voting_contract(1000)
+    print(tx)
+    # deploy_verifier_contract()
