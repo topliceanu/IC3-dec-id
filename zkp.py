@@ -54,7 +54,7 @@ def generate_proof(voter_pk, eth_address, r:str, issuer_pk, signed_commitment, c
     command = [
             "snarkjs",
             "groth16",
-            "prove"
+            "prove",
             "./voting/voting_check.zkey",
             witness_file.name,
             proof_file.name,

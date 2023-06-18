@@ -248,4 +248,5 @@ def vote():
 
     proof, public = generate_proof(user['pk'], user['voting_account'], user['r'], issuer_pk,
                                    user["signed_commitment"], user['commitment'])
-    print(">>>>>", proof, public)
+
+    return json.dumps({'proof': proof, 'public': public}), 200, { "Content-Type": "application/json" }
