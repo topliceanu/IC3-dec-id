@@ -45,7 +45,7 @@ export function VotingForm() {
     console.log(values)
 
     const postData = async () => {
-      const url = "http://localhost:8000/register"
+      const url = "http://localhost:8000/vote"
       const data = {
         token: "Bearer jufCZwvS3GES9aYbJatwv4GPHzoc7j",
         vote: values.vote,

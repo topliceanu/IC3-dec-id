@@ -1,13 +1,15 @@
-import json
-import subprocess
-import requests
-from generate_sig import generate_keys, mimc_signature
+from eth_keys import keys
 from flask import Flask, request
 from flask_cors import CORS
+import json
+import requests
+import subprocess
+
 from attestation_check import is_attestation_valid
-from vote_signature import gen_key
 from generate_commitment import mimc_commit
-from eth_keys import keys
+from generate_sig import generate_keys, mimc_signature
+from vote_signature import gen_key
+from zkp import generate_proof
 
 app = Flask(__name__)
 CORS(app)
@@ -199,10 +201,8 @@ def register():
     set_user_data(auth_token, "pk", public_key) # set public key
     set_user_data(auth_token, "sk", private_key) # set private key
 
-
     # make commitment
-    acct_address = eth_address
-    commitment, r = mimc_commit(int(acct_address, 16), True)
+    r, commitment = mimc_commit(int(eth_address, 16), True)
 
     print("Contacting server at", SERVER_URL + "/issue")
     server_req = requests.post(SERVER_URL + "/issue", json={ "commitment": commitment, "attestation": attestation })
@@ -238,8 +238,14 @@ def register_voter():
 @app.route("/vote", methods = ["POST"])
 def vote():
     data = request.get_json()
+    print("-----", data)
+    token = data['token']
     vote = data['vote']
 
-# @app.route("/post/vote")
-# def vote():
-#     pass
+    if token not in users:
+        return '{"error": "unrecognised token"}', 401, { "Content-Type": "application/json" }
+    user = users[token]
+
+    proof, public = generate_proof(user['pk'], user['voting_account'], user['r'], issuer_pk,
+                                   user["signed_commitment"], user['commitment'])
+    print(">>>>>", proof, public)
