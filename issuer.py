@@ -8,7 +8,7 @@ import subprocess
 from attestation_check import is_attestation_valid
 from generate_commitment import mimc_commit
 from generate_sig import generate_keys, mimc_signature
-from vote import vote
+from vote import vote_onchain
 from vote_signature import gen_key
 from zkp import generate_proof
 
@@ -256,7 +256,6 @@ def vote():
     data = request.get_json()
     print("-----", data)
     token = data['token']
-    vote = data['vote']
 
     if token not in users:
         return '{"error": "unrecognised token"}', 401, { "Content-Type": "application/json" }
@@ -268,6 +267,13 @@ def vote():
     contract_address = '0xb6a6a7EF95d9419eca96d2f2b8cE71D5820E59e1' # TODO Change this to read from file !!!!!!
 
     send_tx_sk = accounts[user['voting_account']]
-    transaction_hash = vote(0, contract_address, user['sk'], user['pk'], send_tx_sk, proof)
+    print("............", int(data['vote']))
+    print("............", contract_address)
+    print("............", user['sk'])
+    print("............", user['voting_account'])
+    print("............", send_tx_sk)
+    print("............", proof)
+    transaction_hash = vote_onchain(int(data['vote']), contract_address, user['sk'], user['voting_account'], send_tx_sk, proof)
+    print(">>>>>>>>> transaction hash", transaction_hash)
 
-    return json.dumps({'proof': proof, 'public': public}), 200, { "Content-Type": "application/json" }
+    return json.dumps({'proof': proof, 'public': public, 'transaction_hash': transaction_hash}), 200, { "Content-Type": "application/json" }

@@ -41,3 +41,9 @@ cd ./ui
 npm install
 npm run dev
 =======
+
+## Deployin the project
+
+```bash
+rsync -rlv . root@137.184.23.140:/root/IC3-dec-id/ # Make sure your SSH key is present on the
+```
