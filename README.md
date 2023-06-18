@@ -27,3 +27,11 @@ Follow the [installation guides](https://docs.circom.io/getting-started/installa
 ```bash
 flask --app issuer run -p 8000
 ```
+
+## Running the UI
+
+```bash
+cd ./ui
+npm install
+npm run dev
+```
