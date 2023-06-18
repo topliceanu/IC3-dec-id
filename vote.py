@@ -41,7 +41,7 @@ def vote(vote: int, contract_address: str, private_key_to_sign_vote: str, public
     tx = vote_func.build_transaction({
         'gas': gas_estimate,
         'nonce': w3.eth.get_transaction_count(w3.eth.default_account)
-    })(str,str,str)
+    })
 
     # Sign the transaction
     signed_tx = w3.eth.account.sign_transaction(tx, private_key_to_sign_transaction)
@@ -59,10 +59,10 @@ if __name__ == '__main__':
     # from vote_signature import gen_key
     # private_key_to_sign_vote, _, public_address_to_verify_vote = gen_key()
 
-    from deploy import deploy_voting_contract
-    contract_address = deploy_voting_contract()
-    print(f'Contract deployed at: {contract_address}')
-    # contract_address = Web3.to_checksum_address('0x428ec0e46869c593b5293c169d7b3a0c90d523e2')
+    # from deploy import deploy_voting_contract
+    # contract_address = deploy_voting_contract()
+    # print(f'Contract deployed at: {contract_address}')
+    contract_address = Web3.to_checksum_address('0xeb68d1Db74dF56DD2A431B0F3D1097Aa7DfAB42c')
 
     # proof = {'pi_a':
     #              ['15562274451659027381878005828066679949078614184963982851792018092783121752936',
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     #          'protocol': 'groth16', 'curve': 'bn128'}
 
     option = 1
-    contract_address = '0x95D959F2Ac5DEa87099F07d3B73E6bde6d61906A'
+    contract_address = '0xeb68d1Db74dF56DD2A431B0F3D1097Aa7DfAB42c'
     private_key_to_sign_vote = '0x5e5a33688c0220a2227b0b2a878cbd7419250d94e4eb02bd4b5af0bd158c41e2'
     public_address_to_verify_vote = '0x644A0b8c42647AaEb7733cB69e792925325b1f30'
     # public_address_to_verify_vote = '0x490af7cdb889c48c07d6f8991fbff74396c62973e8540e042bb70942ad8a84456f1bcd35274a11136d4890535117a79d7da7a69957bcb2ed4b38f4d05c45314f'
