@@ -32,9 +32,9 @@ def Hint_l(m):
 
     return (int(binary, 2))
 
-def generate_keys(random):
+def generate_keys(use_random):
     sk = 123123
-    if random:
+    if use_random:
         sk = random.getrandbits(128) % curve_order
 
     pk = publickey_l(sk)
