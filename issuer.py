@@ -265,6 +265,9 @@ def vote():
     proof, public = generate_proof(user['pk'], user['voting_account'], user['r'], issuer_pk,
                                    user["signed_commitment"], user['commitment'])
 
+    # with open(f'voting_contract_address.json', 'r') as f:
+    #    contract_address = json.load(f)['address']
+
     contract_address = '0xb6a6a7EF95d9419eca96d2f2b8cE71D5820E59e1' # TODO Change this to read from file !!!!!!
 
     send_tx_sk = accounts[user['voting_account']]

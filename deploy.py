@@ -59,6 +59,10 @@ def deploy_voting_contract(num_of_blocks: int = 100) -> str:
     # Wait for the transaction to be mined
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash, 60)
 
+    address = tx_receipt['contractAddress']
+    with open(f'voting_contract_address.json', 'w') as f:
+        json.dump({'address': address}, f)
+
     return tx_receipt['contractAddress']
 
 def deploy_verifier_contract() -> str:
