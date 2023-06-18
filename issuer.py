@@ -8,6 +8,7 @@ import subprocess
 from attestation_check import is_attestation_valid
 from generate_commitment import mimc_commit
 from generate_sig import generate_keys, mimc_signature
+from vote import vote
 from vote_signature import gen_key
 from zkp import generate_proof
 
@@ -263,5 +264,10 @@ def vote():
 
     proof, public = generate_proof(user['pk'], user['voting_account'], user['r'], issuer_pk,
                                    user["signed_commitment"], user['commitment'])
+
+    contract_address = '0xb6a6a7EF95d9419eca96d2f2b8cE71D5820E59e1' # TODO Change this to read from file !!!!!!
+
+    send_tx_sk = accounts[user['voting_account']]
+    transaction_hash = vote(0, contract_address, user['sk'], user['pk'], send_tx_sk, proof)
 
     return json.dumps({'proof': proof, 'public': public}), 200, { "Content-Type": "application/json" }
