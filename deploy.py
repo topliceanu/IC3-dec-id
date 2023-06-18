@@ -30,7 +30,7 @@ def deploy_voting_contract(num_of_blocks: int = 100) -> str:
     verifier_contract_address = Web3.to_checksum_address('0x8c4c43c64943a7a6fd0ab8575194afaaafbfcdf1')
 
     # Define the arguments for the contract constructor (if any)
-    constructor_args = (num_of_blocks, issuer_pk[0],issuer_pk[1], verifier_contract_address)
+    constructor_args = (num_of_blocks, issuer_pk[0],issuer_pk[1])
 
     # Build a transaction to deploy the contract
     contract_factory = w3.eth.contract(abi=contract_abi, bytecode=contract_bytecode)
