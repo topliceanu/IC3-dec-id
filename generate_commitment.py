@@ -2,11 +2,9 @@ from generate_mimc_hash import *
 import random
 
 
-def mimc_commit(msg, random):
+def mimc_commit(msg, use_random):
     r = 11
-    if random:
+    if use_random:
         r = random.getrandbits(128) % curve_order
     com = MultiMiMC7(91, [msg, r], 0)
-    return r, com 
-
-
+    return r, com

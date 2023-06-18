@@ -58,7 +58,7 @@ def get_user_eth_address(token) -> str:
         if v == False:
             account_usage_mapping[k] = True
             return k
-    
+
     return "too many users have registered"
 
 def set_user_data(token, dict_key, data):
@@ -143,7 +143,7 @@ def issue():
     print("signed commitment on the server", signed_commitment)
 
     payload = {
-        "success": "true", 
+        "success": "true",
         "data": {
             "signed_commitment": signed_commitment
         }
@@ -201,8 +201,8 @@ def register():
 
 
     # make commitment
-    acct_address = eth_address 
-    commitment, r = mimc_commit(int(acct_address, 16))
+    acct_address = eth_address
+    commitment, r = mimc_commit(int(acct_address, 16), True)
 
     print("Contacting server at", SERVER_URL + "/issue")
     server_req = requests.post(SERVER_URL + "/issue", json={ "commitment": commitment, "attestation": attestation })
@@ -210,7 +210,7 @@ def register():
 
     print(server_req.json()['data']['signed_commitment'])
 
-    signed_commitment = server_req.json()['data']['signed_commitment'] 
+    signed_commitment = server_req.json()['data']['signed_commitment']
 
     set_user_data(auth_token, "commitment", commitment) # set user commitment
     set_user_data(auth_token, "signed_commitment", signed_commitment) # set signed commitment
