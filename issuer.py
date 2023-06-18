@@ -7,12 +7,52 @@ from flask_cors import CORS
 from attestation_check import is_attestation_valid
 from vote_signature import gen_key
 from generate_commitment import mimc_commit
+from eth_keys import keys
 
 app = Flask(__name__)
 CORS(app)
 
 DISCORD_SERVER_ID = "1117987715179348009"
 SERVER_URL = "http://localhost:8000"
+
+accounts = {
+    '0x644A0b8c42647AaEb7733cB69e792925325b1f30': '0x5e5a33688c0220a2227b0b2a878cbd7419250d94e4eb02bd4b5af0bd158c41e2',
+    '0x37f4c170e34B565D655C70793eAf21B71C06a33d': '0xa6bc95777e55effec043f693118dd6099452c5d85d5e6bae9f961874e5e78a77',
+    '0x28e17e23DFd9a9E85A1438e9056DfeA6888B9f63': '0xe48cf747e9b5add7dd343196e1b35ecac2e628aa52135e3a8e9bed21c1994de8',
+    '0x6B276e1B9889E3E28153Dbd44305a43616927ce0': '0xb8acb18b69da6b5b06e24892f33389d4b895bae5d1699fa366dea6ca270d4b4c',
+    '0x3E9116a3383218B43Aca601Cda248024574d6c57': '0xa8c33599485318db5a95ef91500c8a9ca43c690c3acd14acf07845b5b369c257',
+    '0x75FC09F1B92d69DDB8236e40dD8e3191ee04b051': '0xf7f5522289ae0bc1ff65a6550a62c473462b29d5082c08cf1f2ede22daf24b07',
+    '0x20eBBaeA260cB2F3635e13d52F1233536831A4d7': '0x490ce5a90bd6831be2a545ca9205b222b4c17eba80676249c1d8c43fb562251a',
+    '0x04E5EaEf32D709ac19cec6832e6eA0D6B574Cbbb': '0x4a89df56dae017bc97f60e47d3eae7068d60d6857ca801f63aa4269bfedfc2a6',
+    '0x501721D88872779bf6c44529Ef58fD78d823a198': '0xd8ba7e27d044c1f5f08dcb9732583a6aad462edf81cb4e096ca9e417e3268374',
+    '0xBC300e8A6611EA4B2e788fDafa4fdBd6880ff6A4': '0xa5c9a0a7e68c24ccef43994c26f372ccca2ab4299ce5267f4003acdd00b13b5b'
+}
+
+account_usage_mapping = {
+    '0x644A0b8c42647AaEb7733cB69e792925325b1f30': False,
+    '0x37f4c170e34B565D655C70793eAf21B71C06a33d': False,
+    '0x28e17e23DFd9a9E85A1438e9056DfeA6888B9f63': False,
+    '0x6B276e1B9889E3E28153Dbd44305a43616927ce0': False,
+    '0x3E9116a3383218B43Aca601Cda248024574d6c57': False,
+    '0x75FC09F1B92d69DDB8236e40dD8e3191ee04b051': False,
+    '0x20eBBaeA260cB2F3635e13d52F1233536831A4d7': False,
+    '0x04E5EaEf32D709ac19cec6832e6eA0D6B574Cbbb': False,
+    '0x501721D88872779bf6c44529Ef58fD78d823a198': False,
+    '0xBC300e8A6611EA4B2e788fDafa4fdBd6880ff6A4': False
+}
+
+users = {}
+
+def get_user_eth_address(token) -> str:
+    for k,v in account_usage_mapping.items():
+        if v == False:
+            account_usage_mapping[k] = True
+            return k
+    
+    return "too many users have registered"
+
+def set_user_data(token, dict_key, data):
+    users[token][dict_key] = data
 
 # deco configs
 command = [
@@ -110,7 +150,8 @@ def register():
     deco_cfg = get_deco_config(token = auth_token, server_id = DISCORD_SERVER_ID)
 
     serialized_cfg = json.dumps(deco_cfg)
-    private_key, public_key, acct_address = gen_key()
+    # private_key, public_key, acct_address = gen_key() # not in use because we have generated accounts with money now
+
 
     # attestation = subprocess.check_output(command, serialized_cfg, text=True)
     # completed = subprocess.run(
@@ -138,12 +179,32 @@ def register():
     if not is_attestation_valid(attestation):
         exit(1)
 
+    # register user in our internal data mapping
+    users[auth_token] = {}
+    eth_address = get_user_eth_address(auth_token)
+    private_key = accounts[eth_address]
+    public_key = keys.PrivateKey(bytes.fromhex(private_key[2:])).public_key
+
+    set_user_data(auth_token, "voting_account", eth_address) # set voting account
+    set_user_data(auth_token, "pk", public_key) # set public key
+    set_user_data(auth_token, "sk", private_key) # set private key
+
+
     # make commitment
+    acct_address = eth_address 
     commitment, r = mimc_commit(int(acct_address, 16))
 
     print("Contacting server at", SERVER_URL + "/issue")
     server_req = requests.post(SERVER_URL + "/issue", json={ "commitment": commitment, "attestation": attestation })
     print(f"Status Code: {server_req.status_code}, Response: {server_req.json()}")
+
+    print(server_req.json()['data']['signed_commitment'])
+
+    signed_commitment = server_req.json()['data']['signed_commitment'] 
+
+    set_user_data(auth_token, "commitment", commitment) # set user commitment
+    set_user_data(auth_token, "signed_commitment", signed_commitment) # set signed commitment
+    set_user_data(auth_token, "r", r) # set random value
 
     payload = {
         "success": "true",
@@ -153,6 +214,10 @@ def register():
             "attestation": attestation,
         }
     }
+
+    print("\n user has been loaded on the server")
+    print(users[auth_token])
+
     # ask issuer to verify attestation, commitment, and zkp
     return json.dumps(payload), 200, { "Content-Type": "application/json" }
 
