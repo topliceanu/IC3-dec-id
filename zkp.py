@@ -1,27 +1,31 @@
 import json
 import tempfile
+import subprocess
 
 def write_to_tmp_file(data):
     with tempfile.NamedTemporaryFile(mode='w', delete=False, dir='/tmp') as temp_file:
         temp_file.write(json.dumps(data, indent=4))
         temp_file.flush()
-        temp_file_absolute_path = '/tmp' + temp_file.name
-    return temp_file_absolute_path
+    return temp_file.name
 
-def generate_proof(voter_pk:str, r:str, issuer_pk, signed_commitment):
+def generate_proof(voter_pk, voter_addr, r:str, issuer_pk, signed_commitment, commitment):
     # Create a tmp file to store the input for the ZK circuit.
     zkp_input = {
-        "voter_PK": voter_pk,
-        "voter_r": r,
+        "voter_PK": str(int(voter_addr, 16)),
+        #"voter_PK": str(int.from_bytes(voter_pk.to_bytes(), byteorder="big")),
+        "voter_r": str(r),
         "enabled": "1", # Always 1
         # Public key of the issuer
-        "Ax": issuer_pk[0],
-        "Ay": issuer_pk[1],
+        "Ax": str(issuer_pk[0]),
+        "Ay": str(issuer_pk[1]),
         # Signed commitment using sk_issuer
-        "S":signed_commitment.S,
-        "R8x":signed_commitment.R[0],
-        "R8y":signed_commitment.R[1],
+        "S":str(signed_commitment[1]),
+        "R8x":str(signed_commitment[0][0]),
+        "R8y":str(signed_commitment[0][1]),
+        # Commitment
+        "M": str(commitment),
     }
+    print("--------", json.dumps(zkp_input))
     input_file_path = write_to_tmp_file(zkp_input)
 
     witness_file = tempfile.NamedTemporaryFile(delete=False, dir='/tmp')
@@ -29,16 +33,17 @@ def generate_proof(voter_pk:str, r:str, issuer_pk, signed_commitment):
 
     command = [
             "node",
-            "./voting_check_js/generate_witness.js",
-            "./voting_check_js/voting_check.wasm",
+            "./voting/voting_check_js/generate_witness.js",
+            "./voting/voting_check_js/voting_check.wasm",
             input_file_path,
-            '/tmp' + witness_file.name,
+            witness_file.name,
     ]
     completed = subprocess.run(
         command,
         text=True,
         capture_output=True,
         )
+    print(">>>>>>>>>>>", completed)
 
     proof_file = tempfile.NamedTemporaryFile(delete=False, dir='/tmp')
     proof_file.close()
@@ -51,9 +56,9 @@ def generate_proof(voter_pk:str, r:str, issuer_pk, signed_commitment):
             "groth16",
             "prove"
             "./voting/voting_check.zkey",
-            "/tmp" + witness_file.name,
-            "/tmp" + proof_file.name,
-            "/tmp" + public_file.name,
+            witness_file.name,
+            proof_file.name,
+            public_file.name,
     ]
     completed = subprocess.run(
         command,
@@ -61,8 +66,8 @@ def generate_proof(voter_pk:str, r:str, issuer_pk, signed_commitment):
         capture_output=True,
         )
 
-    proof_file_contents = open('/tmp' + proof_file.name, 'r').read()
-    public_file_contents = open('/tmp' + public_file.name, 'r').read()
+    proof_file_contents = open(proof_file.name, 'r').read()
+    public_file_contents = open(public_file.name, 'r').read()
 
     proof = json.loads(proof_file_contents)
     public = json.loads(public_file_contents)

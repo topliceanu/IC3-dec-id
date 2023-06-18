@@ -201,10 +201,8 @@ def register():
     set_user_data(auth_token, "pk", public_key) # set public key
     set_user_data(auth_token, "sk", private_key) # set private key
 
-
     # make commitment
-    acct_address = eth_address
-    commitment, r = mimc_commit(int(acct_address, 16), True)
+    commitment, r = mimc_commit(int(eth_address, 16), True)
 
     print("Contacting server at", SERVER_URL + "/issue")
     server_req = requests.post(SERVER_URL + "/issue", json={ "commitment": commitment, "attestation": attestation })
@@ -240,6 +238,7 @@ def register_voter():
 @app.route("/vote", methods = ["POST"])
 def vote():
     data = request.get_json()
+    print("-----", data)
     token = data['token']
     vote = data['vote']
 
@@ -247,5 +246,6 @@ def vote():
         return '{"error": "unrecognised token"}', 401, { "Content-Type": "application/json" }
     user = users[token]
 
-    proof, public = generate_proof(user['pk'], user['r'], issuer_pk, user["signed_commitment"])
+    proof, public = generate_proof(user['pk'], user['voting_account'], user['r'], issuer_pk,
+                                   user["signed_commitment"], user['commitment'])
     print(">>>>>", proof, public)
