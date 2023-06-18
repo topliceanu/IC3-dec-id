@@ -3,7 +3,7 @@ import json
 from solcx import compile_standard, install_solc
 
 
-def compile_contract(path):
+def compile_contract(path: str, name: str):
     # Ensure that we're using the same version of Solidity that the contract expects
     install_solc('0.8.0')
 
@@ -16,7 +16,7 @@ def compile_contract(path):
     compilation_input = {
         "language": "Solidity",
         "sources": {
-            "VotingContract.sol": {
+            path: {
                 "content": contract_source_code
             }
         },
@@ -33,7 +33,7 @@ def compile_contract(path):
     compilation_result = compile_standard(compilation_input)
 
     # Get the contract ABI and bytecode
-    contract_interface = compilation_result['contracts']['VotingContract.sol']['VotingContract']
+    contract_interface = compilation_result['contracts'][path][f'{name}']
     contract_bytecode = contract_interface['evm']['bytecode']['object']
     contract_abi = json.loads(contract_interface['metadata'])['output']['abi']
 
