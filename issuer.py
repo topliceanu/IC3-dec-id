@@ -126,8 +126,23 @@ def get_deco_config(token, server_id):
   ]
 }
 
+ISSUER_KEYS_JSON_PATH = "issuer_keys.json"
+
+# Read from file
+with open(ISSUER_KEYS_JSON_PATH, 'r') as file:
+    issuer_keys_dict_obj = json.load(file)
+
+print(issuer_keys_dict_obj)
+
 # issuer config
-issuer_sk, issuer_pk = generate_keys(True) # make random=True
+issuer_sk, issuer_pk = issuer_keys_dict_obj['issuer_sk'], issuer_keys_dict_obj['issuer_pk']
+
+print("-------------ISSUER KEYS----------------")
+print("-------------PUBLIC KEY-------------")
+print(issuer_pk)
+print("-------------PRIVATE KEY-------------")
+print(issuer_sk)
+print("----------------END-----------------")
 
 @app.route("/issue", methods = ["POST"])
 def issue():

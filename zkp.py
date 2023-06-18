@@ -25,7 +25,6 @@ def generate_proof(voter_pk, eth_address, r:str, issuer_pk, signed_commitment, c
         # Commitment
         "M": str(commitment),
     }
-    print("--------", json.dumps(zkp_input))
     input_file_path = write_to_tmp_file(zkp_input)
 
     witness_file = tempfile.NamedTemporaryFile(delete=False, dir='/tmp')
@@ -43,7 +42,6 @@ def generate_proof(voter_pk, eth_address, r:str, issuer_pk, signed_commitment, c
         text=True,
         capture_output=True,
         )
-    print(">>>>>>>>>>>", completed)
 
     proof_file = tempfile.NamedTemporaryFile(delete=False, dir='/tmp')
     proof_file.close()
