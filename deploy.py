@@ -5,6 +5,7 @@ from eth_account import Account
 
 from compile import compile_contract
 
+
 def deploy_voting_contract(num_of_blocks: int = 100) -> str:
     # Setup infura project ID and endpoint
     infura_url = "https://goerli.infura.io/v3/a342124bc854400c8e812ca793ebc06c"
@@ -57,7 +58,7 @@ def deploy_voting_contract(num_of_blocks: int = 100) -> str:
     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
 
     # Wait for the transaction to be mined
-    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash, 60)
+    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash, 180)
 
     address = tx_receipt['contractAddress']
     with open(f'voting_contract_address.json', 'w') as f:
