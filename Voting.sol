@@ -45,14 +45,14 @@ contract VotingContract{
         require(_option >= 0 && _option < 2, "Option does not exist");
 
         // Check vote signature is valid
-        bytes32 option_hash = keccak256(abi.encodePacked(_option));
-        address recovered_pk = recoverSig(_user_sig, option_hash);
-        require(recovered_pk == _pk_user, "Invalid signature");
+        //bytes32 option_hash = keccak256(abi.encodePacked(_option));
+        //address recovered_pk = recoverSig(_user_sig, option_hash);
+        //require(recovered_pk == _pk_user, "Invalid signature");
 
-        uint[3] memory pubSignals = [issuer_pk[0], issuer_pk[1], uint256(uint160(recovered_pk))];
+        //uint[3] memory pubSignals = [issuer_pk[0], issuer_pk[1], uint256(uint160(recovered_pk))];
         
         // Check zk proof of voting qualification
-        require(zkVerfier.verifyProof(_pA, _pB, _pC, pubSignals));
+        //require(zkVerfier.verifyProof(_pA, _pB, _pC, pubSignals));
         
         // Check not voted before
         require(!spent_votes[_pk_user], "Already voted");
