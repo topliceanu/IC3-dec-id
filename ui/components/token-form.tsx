@@ -54,7 +54,7 @@ export function TokenSubmissionForm({
     console.log(values)
 
     const postData = async () => {
-      const url = "http://137.184.23.140:8000/register"
+      const url = DECO_ENDPOINT_URL
       const data = { token: `Bearer ${values.token}` }
 
       try {

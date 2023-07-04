@@ -28,7 +28,7 @@ def create_accounts(num_of_accounts: int) -> Dict[str, str]:
 
 def fund_account(fund_from: str, address: str, ether_amount: float) -> str:
     # Setup infura project ID and endpoint
-    infura_url = "https://goerli.infura.io/v3/a342124bc854400c8e812ca793ebc06c"
+    infura_url = INFURA_URL
 
     # Connect to the Ethereum blockchain using Infura
     w3provider = w3.Web3(w3.HTTPProvider(infura_url))

@@ -45,7 +45,7 @@ export function VotingForm() {
     console.log(values)
 
     const postData = async () => {
-      const url = "http://137.184.23.140:8000/vote"
+      const url = DECO_URL
       const data = {
         token: `Bearer ${values.token}`,
         vote: values.vote,

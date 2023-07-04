@@ -10,8 +10,6 @@ export const siteConfig = {
     },
   ],
   links: {
-    // twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/NehharShah/IC3-dec-id",
-    // docs: "https://ui.shadcn.com",
+    github: "TBD",
   },
 }

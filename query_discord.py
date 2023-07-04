@@ -9,7 +9,7 @@ load_dotenv()
 API_ENDPOINT = 'https://discord.com/api/v10'
 CLIENT_ID = os.getenv('DISCORD_APPLICATION_ID')
 CLIENT_SECRET = os.getenv('DISCORD_CLIENT_SECRET')
-REDIRECT_URI = 'https://ukcw.io'
+REDIRECT_URI = os.getenv('REDIRECT_URI')
 
 def exchange_code(code):
   data = {
@@ -44,7 +44,7 @@ def get_user_server_list(access_token):
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': f'Bearer {access_token}'
   }
-    
+
   print("headers", headers)
   r = requests.get('%s/users/@me/guilds' % API_ENDPOINT, headers=headers)
   r.raise_for_status()
@@ -59,7 +59,7 @@ print("auth obj", auth_obj)
 #
 # found = False
 # for server in server_list:
-#     if server['id'] == '1117987715179348009':
+#     if server['id'] == DISCORD_SERVER_ID:
 #         print('user is a part of dec-id')
 #         found = True
 #

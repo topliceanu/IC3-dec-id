@@ -15,9 +15,7 @@ from zkp import generate_proof
 app = Flask(__name__)
 CORS(app)
 
-DISCORD_SERVER_ID = "1117987715179348009"
-#SERVER_URL = "http://localhost:8000"
-SERVER_URL = "http://137.184.23.140:8000"
+SERVER_URL = "http://localhost:8000"
 
 accounts = {
     '0x644A0b8c42647AaEb7733cB69e792925325b1f30': '0x5e5a33688c0220a2227b0b2a878cbd7419250d94e4eb02bd4b5af0bd158c41e2',
@@ -84,11 +82,11 @@ def get_deco_config(token, server_id):
     return {
   "mode": "prover",
   "prover": {
-    "verifier_addr": "http://api.deco.works:12345",
+    "verifier_addr": DECO_URL,
     "num_zkp_threads": 4,
     "signature_scheme": "ed25519",
     "attestation_scheme": "json",
-    "auth": "005a587151514a45313338676f6f4e6547334c4157356c4c39795732526a7a41"
+    "auth": DECO_AUTH_TOKEN,
   },
   "proof_specs": [
     {

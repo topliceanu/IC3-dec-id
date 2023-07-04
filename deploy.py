@@ -8,7 +8,7 @@ from compile import compile_contract
 
 def deploy_voting_contract(num_of_blocks: int = 10000) -> str:
     # Setup infura project ID and endpoint
-    infura_url = "https://goerli.infura.io/v3/a342124bc854400c8e812ca793ebc06c"
+    infura_url = INFURA_URL
 
     # Connect to the Ethereum blockchain using Infura
     w3 = Web3(HTTPProvider(infura_url))

@@ -24,11 +24,11 @@ def get_deco_config(token, server_id):
     return {
   "mode": "prover",
   "prover": {
-    "verifier_addr": "http://api.deco.works:12345",
+    "verifier_addr": DECO_URL,
     "num_zkp_threads": 4,
     "signature_scheme": "ed25519",
     "attestation_scheme": "json",
-    "auth": "005a587151514a45313338676f6f4e6547334c4157356c4c39795732526a7a41"
+    "auth": DECO_AUTH_TOKEN,
   },
   "proof_specs": [
     {
@@ -69,8 +69,8 @@ def get_deco_config(token, server_id):
 }
 
 if __name__ == "__main__":
-    auth_token = "Bearer jufCZwvS3GES9aYbJatwv4GPHzoc7j" # sys.argv[1]
-    deco_cfg = get_deco_config(token = auth_token, server_id = "1117987715179348009")
+    auth_token = "Bearer "+DISCORD_OAUTH_TOKEN # sys.argv[1]
+    deco_cfg = get_deco_config(token = auth_token, server_id = DISCORD_ID)
     serialized_cfg = json.dumps(deco_cfg)
     private_key, public_key, acct_address = gen_key()
 

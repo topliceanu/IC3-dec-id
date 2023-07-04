@@ -8,7 +8,7 @@ from vote_signature import sign_vote
 def vote(vote: int, contract_address: str, private_key_to_sign_vote: str, public_address_to_verify_vote: str,
          private_key_to_sign_transaction: str, proof) -> str:
     # Setup infura project ID and endpoint
-    infura_url = "https://goerli.infura.io/v3/a342124bc854400c8e812ca793ebc06c"
+    infura_url = INFURA_URL
 
     # Connect to the Ethereum blockchain using Infura
     w3 = Web3(HTTPProvider(infura_url))
