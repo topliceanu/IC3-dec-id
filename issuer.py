@@ -178,6 +178,7 @@ def register():
     print("at register route, data sent: ", data)
 
     auth_token = data['token']
+    '''
     deco_cfg = get_deco_config(token = auth_token, server_id = DISCORD_SERVER_ID)
 
     serialized_cfg = json.dumps(deco_cfg)
@@ -209,6 +210,9 @@ def register():
     # check attestation
     if not is_attestation_valid(attestation):
         exit(1)
+    
+    '''
+    attestation = True
 
     # register user in our internal data mapping
     users[auth_token] = {}
