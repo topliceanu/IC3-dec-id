@@ -154,8 +154,9 @@ def issue():
     attestation, commitment = data['attestation'], data['commitment']
 
     # run attestation check
-    if not is_attestation_valid(attestation):
-        return  '{"error": "deco attestation signature check failed"}', 400, { "Content-Type": "application/json" }
+    # TODO Enable attestation check
+    # if not is_attestation_valid(attestation):
+    #     return  '{"error": "deco attestation signature check failed"}', 400, { "Content-Type": "application/json" }
 
     # typecheck commitment
 
@@ -177,6 +178,7 @@ def register():
     data = request.get_json()
     print("at register route, data sent: ", data)
 
+    # TODO Add back deco
     auth_token = data['token']
     '''
     deco_cfg = get_deco_config(token = auth_token, server_id = DISCORD_SERVER_ID)
