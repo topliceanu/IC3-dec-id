@@ -1,11 +1,12 @@
 import json
 
+import solcx
 from solcx import compile_standard, install_solc
 
 
 def compile_contract(path: str, name: str):
     # Ensure that we're using the same version of Solidity that the contract expects
-    install_solc('0.8.0')
+    version = install_solc('0.8.16')
 
     # Define the contract source code (replace this with your actual contract source code)
     # Here, we're reading it from a .sol file
@@ -30,7 +31,7 @@ def compile_contract(path: str, name: str):
     }
 
     # Compile the contract
-    compilation_result = compile_standard(compilation_input)
+    compilation_result = compile_standard(compilation_input, solc_version=version)
 
     # Get the contract ABI and bytecode
     contract_interface = compilation_result['contracts'][path][f'{name}']
