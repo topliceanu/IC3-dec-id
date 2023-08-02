@@ -32,7 +32,20 @@ def vote(vote: int, contract_address: str, private_key_to_sign_vote: str, public
     pb = [[int(i) for i in l] for l in proof['pi_b']][:2]
     pc = [int(i) for i in proof['pi_c']][:2]
 
+    # Reverse the lists in pb to match the order required by the Groth16 verifier
+    pb = [l[::-1] for l in pb]
+
     # Build the transaction
+    print('Contract params',
+          # Convert all ' to " and wrap all strings in " to make it valid JSON
+          str((
+              str(vote),
+              str(Web3.to_checksum_address(public_address_to_verify_vote)),
+              str(vote_signature),
+              [str(v) for v in pa],
+              [[str(v) for v in l] for l in pb],
+              [str(v) for v in pc]
+          )).replace("'", '"'))
     vote_func = contract.functions.vote(vote, Web3.to_checksum_address(public_address_to_verify_vote),
                                         vote_signature, pa, pb, pc)
     gas_estimate = vote_func.estimate_gas()
@@ -95,8 +108,52 @@ if __name__ == '__main__':
      'pi_c': ['20716001530272162660557263875964058567432966967665131986808342700370659004018',
               '1211865286496123190855980455342157474644007294939728074462639869485673131922', '1'],
      'protocol': 'groth16', 'curve': 'bn128'}
-    transaction_hash = vote(option, contract_address, private_key_to_sign_vote, public_address_to_verify_vote,
-                            send_tx_address, proof)
+
+    # transaction_hash = vote(option, contract_address, private_key_to_sign_vote, public_address_to_verify_vote,
+    #                         send_tx_address, proof)
+
+    args = (
+        1,
+        '0x04C65a9F60963fD62Bb539618DCECf2a74A7a896',
+        '0x5e5a33688c0220a2227b0b2a878cbd7419250d94e4eb02bd4b5af0bd158c41e2',
+        '0x644A0b8c42647AaEb7733cB69e792925325b1f30',
+        '0x5e5a33688c0220a2227b0b2a878cbd7419250d94e4eb02bd4b5af0bd158c41e2',
+        {
+            'pi_a':
+            [
+                '873001267310603190896701013382933637125916198828729124126196794054817986870',
+                '17575541452019960402536467926348638972591941941483107610707119754488201147418',
+                '1'
+            ],
+            'pi_b':
+            [
+                [
+                    '14460593531141460946857198143374167637175174350958035873416396029278478450885',
+                    '149921841923923877921576406334420611547863379255396862544383444177817882790'
+                ],
+                [
+                    '1364587075593790675778832869636769771098892684960564824135903705267014397258',
+                    '18203631379030205728400284494938879473956272412568075351932077078800648775451'
+                ],
+                [
+                    '1',
+                    '0'
+                ]
+            ],
+            'pi_c':
+                [
+                    '18912844620528115999533657541458470210995329035208371062336787419867050846711',
+                    '18077049637364684765893608892248591809011829519916774951660462760612425356304',
+                    '1'
+                ],
+            'protocol':
+                'groth16',
+            'curve':
+                'bn128'
+        }
+        )
+
+    transaction_hash = vote(*args)
 
     # deployment_private_key = '0x9c07c5b4e3ad30f78303fc1d73eb6e269aa1753bb2f4500fa7210b876156f467'
     # transaction_hash = vote(0, contract_address, private_key_to_sign_vote, public_address_to_verify_vote,
