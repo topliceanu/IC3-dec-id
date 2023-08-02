@@ -27,10 +27,10 @@ def deploy_voting_contract(num_of_blocks: int = 10000) -> str:
     with open('issuer_keys.json') as f:
         issuer_pk = json.load(f)['issuer_pk']
 
-    verifier_contract_address = Web3.to_checksum_address('0x8c4c43c64943a7a6fd0ab8575194afaaafbfcdf1')
+    verifier_contract_address = Web3.to_checksum_address('0x81480f02F452b912D38A76852A3ea78647659F22')
 
     # Define the arguments for the contract constructor (if any)
-    constructor_args = (num_of_blocks, issuer_pk[0],issuer_pk[1])
+    constructor_args = (num_of_blocks, issuer_pk[0],issuer_pk[1], verifier_contract_address)
 
     # Build a transaction to deploy the contract
     contract_factory = w3.eth.contract(abi=contract_abi, bytecode=contract_bytecode)
@@ -118,6 +118,6 @@ def deploy_verifier_contract() -> str:
     return tx_receipt['contractAddress']
 
 if __name__ == '__main__':
-    tx = deploy_voting_contract(1000)
+    tx = deploy_voting_contract(100000000)
+    # tx = deploy_verifier_contract()
     print(tx)
-    # deploy_verifier_contract()
