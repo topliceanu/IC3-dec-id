@@ -38,10 +38,7 @@ contract VotingContract{
         bytes32 option_hash = keccak256(abi.encodePacked(_option));
         address recovered_pk = recoverSig(_user_sig, option_hash);
         require(recovered_pk == _pk_user, "Invalid signature");
-        uint[] memory pubSignals = new uint[](3);
-        pubSignals[0] = issuer_pk[0];
-        pubSignals[1] = issuer_pk[1];
-        pubSignals[2] = uint256(uint160(recovered_pk));
+        uint[3] memory pubSignals = [uint256(uint160(recovered_pk)), issuer_pk[0], issuer_pk[1]];
 
         // Check not voted before
         require(!spent_votes[_pk_user], "Already voted");
