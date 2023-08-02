@@ -26,6 +26,7 @@ import {
 } from "./ui/select"
 
 const formSchema = z.object({
+  token: z.string(),
   vote: z.string(),
 })
 
@@ -34,6 +35,7 @@ export function VotingForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      token: "1",
       vote: "1",
     },
   })

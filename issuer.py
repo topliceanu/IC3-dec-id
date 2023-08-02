@@ -8,7 +8,7 @@ import subprocess
 from attestation_check import is_attestation_valid
 from generate_commitment import mimc_commit
 from generate_sig import generate_keys, mimc_signature
-from vote import vote
+from vote import vote as call_contract_vote
 from vote_signature import gen_key
 from zkp import generate_proof
 
@@ -265,7 +265,7 @@ def vote():
     data = request.get_json()
     print("-----", data)
     token = data['token']
-    vote = data['vote']
+    user_vote = int(data['vote'])
 
     if token not in users:
         return '{"error": "unrecognised token"}', 401, { "Content-Type": "application/json" }
@@ -278,6 +278,6 @@ def vote():
     # contract_address = '0xb6a6a7EF95d9419eca96d2f2b8cE71D5820E59e1'
 
     send_tx_sk = accounts[user['voting_account']]
-    transaction_hash = vote(0, contract_address, user['sk'], user['voting_account'], send_tx_sk, proof)
+    transaction_hash = call_contract_vote(user_vote, contract_address, user['sk'], user['voting_account'], send_tx_sk, proof)
 
     return json.dumps({'proof': proof, 'public': public}), 200, { "Content-Type": "application/json" }
